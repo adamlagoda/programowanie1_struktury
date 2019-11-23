@@ -19,12 +19,24 @@ public class StackImpl implements Stack {
 
     @Override
     public int pop() {
-        return 0;
+        int result = elements[counter - 1];
+        counter--;
+        return result;
     }
 
     @Override
     public int peek() {
-        return 0;
+        return elements[counter -1];
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return counter == 0;
+    }
+
+    @Override
+    public int size() {
+        return counter;
     }
 
     @Override

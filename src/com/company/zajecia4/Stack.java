@@ -7,4 +7,8 @@ public interface Stack {
     int pop();
 
     int peek();
+
+    boolean isEmpty();
+
+    int size();
 }
