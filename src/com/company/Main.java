@@ -1,24 +1,12 @@
 package com.company;
 
-import com.company.zajecia4.ArithmeticCalculatorImpl;
 import com.company.zajecia4.Stack;
+import com.company.zajecia4.test.TestStruktury;
 
 public class Main {
 
     public static void main(String[] args) {
-        testCaluclator();
-    }
-
-    private static void testCaluclator() {
-        String input = "1+2*6/3+2";
-        int expected = 7;
-
-        ArithmeticCalculatorImpl calculator = new ArithmeticCalculatorImpl();
-
-        String[] arrOfElements = calculator.mapStringToArray(input);
-        calculator.addElementsFromArray(arrOfElements);
-
-        System.out.println(expected == calculator.calculate());
+        TestStruktury.testCaluclator();
     }
 
     private static void testPop(Stack stack) {

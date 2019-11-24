@@ -1,16 +1,23 @@
 package com.company.zajecia4;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ArithmeticCalculatorImpl implements ArithmeticCalculator {
 
     private final char[] operators = {'+', '-', '*', '/'};
     private String[] data;
+    private int counter;
+
+    public ArithmeticCalculatorImpl() {
+        this.data = new String[20];
+    }
 
     @Override
     public String[] mapStringToArray(String calculation) {
-        List<String> elements = Collections.emptyList();
+        List<String> elements = new LinkedList<>();
 
         while (!calculation.isEmpty()) {
             int index = findIndexOf(calculation);
@@ -29,38 +36,73 @@ public class ArithmeticCalculatorImpl implements ArithmeticCalculator {
 
     @Override
     public void addElementsFromArray(String[] elementsToAdd) {
-        for (String element : elementsToAdd) {
-            push(element);
+        for (int i = elementsToAdd.length - 1; i >= 0; i--) {
+            push(elementsToAdd[i]);
         }
+
+/*        List<String> listFromArray = Arrays.asList(elementsToAdd);
+        Collections.reverse(listFromArray);
+        listFromArray.stream()
+                .forEach(this::push);*/
     }
 
     private void push(String element) {
-
+        data[counter] = element;
+        counter++;
     }
 
     @Override
     public int calculate() {
+
+        Predicate<String> isSlashOrStarOrNull = s -> s != null && (s.equals("/") || s.equals("*"));
+
         int result = 0;
+        String left = pop();
         while (!isEmpty()) {
-            String left = pop();
             String op = pop();
-            String right = "";// implementacja
-            result += resultOfOperation(left, op, right);
+            String right = pop();
+            while (isSlashOrStarOrNull.test(peek())) {
+                String opInner = pop();
+                String rightInner = pop();
+                right = Integer.toString(resultOfOperation(right, opInner, rightInner));
+            }
+            result = resultOfOperation(left, op, right);
+            left = Integer.toString(result);
         }
         return result;
     }
 
-    private int resultOfOperation(String left, String op, String right) {
+    private String peek() {
+        if (counter == 0)
+            return null;
+        return data[counter - 1];
+    }
+
+    public int resultOfOperation(String left, String op, String right) {
+        if (op != null)
+            switch (op) {
+                case "+":
+                    return Integer.parseInt(left) + Integer.parseInt(right);
+                case "-":
+                    return Integer.parseInt(left) - Integer.parseInt(right);
+                case "*":
+                    return Integer.parseInt(left) * Integer.parseInt(right);
+                case "/":
+                    return Integer.parseInt(left) / Integer.parseInt(right);
+            }
         return 0;
     }
 
     private String pop() {
-        return null;
+        if (counter == 0)
+            return null;
+        String result = data[counter - 1];
+        counter--;
+        return result;
     }
 
     private boolean isEmpty() {
-
-        return true;
+        return counter == 0;
     }
 
     private int findIndexOf(String calculation) {
